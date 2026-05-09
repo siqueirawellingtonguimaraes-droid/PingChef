@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"PingChef/cmd/cli"
+)
 
 func main() {
-	fmt.Printf("test")
+	cli.Execute()
 }
