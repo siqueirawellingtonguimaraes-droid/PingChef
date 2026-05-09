@@ -12,7 +12,7 @@ import (
 var (
 	routeName string
 	routeURL  string
-	ticker    int
+	interval  int
 )
 
 var routeAddCmd = &cobra.Command{
@@ -23,9 +23,9 @@ var routeAddCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		endpoint := domain.EndPoint{
-			Name:   routeName,
-			URL:    routeURL,
-			Ticker: time.Second * time.Duration(ticker),
+			Name:     routeName,
+			URL:      routeURL,
+			Interval: time.Second * time.Duration(interval),
 		}
 
 		if err := services.AddEndPoint(&endpoint); err != nil {
@@ -50,8 +50,8 @@ func init() {
 	)
 
 	routeAddCmd.Flags().IntVar(
-		&ticker,
-		"ticker",
+		&interval,
+		"interval",
 		10,
 		"Tempo para cada Ping",
 	)

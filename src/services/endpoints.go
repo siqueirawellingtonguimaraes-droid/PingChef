@@ -13,7 +13,7 @@ func AddEndPoint(endpoint *domain.EndPoint) error {
 	fmt.Println("Novo endpoint adicionado:")
 	fmt.Println("Nome:", endpoint.Name)
 	fmt.Println("URL:", endpoint.URL)
-	fmt.Println("Ticker:", endpoint.Ticker)
+	fmt.Println("Ticker:", endpoint.Interval)
 
 	return nil
 }
