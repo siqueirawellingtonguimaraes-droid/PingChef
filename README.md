@@ -48,7 +48,7 @@ The only implemented feature so far is registering endpoints for future monitori
 ### Command
 
 ```bash
-go run .\cmd\main.go route add --name api --url https://api.example.com/health --ticker 15
+"go run .\cmd\main.go route add --name api --url https://api.example.com/health --interval 15"
 ```
 ---
 
