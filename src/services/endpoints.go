@@ -37,6 +37,19 @@ func RemoveEndPoint() error {
 	return nil
 }
 
-func ListEndPoints() error {
-	return nil
+func ListEndPoints() ([]domain.EndPoint, error) {
+	db, err := infra.ConnectDB()
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	repo := repositories.NewRepository(db)
+
+	endpoints, err := repo.List()
+	if err != nil {
+		return nil, err
+	}
+
+	return endpoints, nil
 }
