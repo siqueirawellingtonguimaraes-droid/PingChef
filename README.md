@@ -98,18 +98,6 @@ The architecture is being prepared for:
 
 ---
 
-# 🏗️ Architecture Vision
-
-The system is being designed to evolve progressively:
-
-```text
-CLI → Monitoring Core → SQLite → Web Platform
-```
-
-Each layer builds on top of the previous one, keeping the system modular and extensible.
-
----
-
 # 🧵 Engineering Focus
 
 This project is intentionally built to explore real-world backend engineering concepts such as:
