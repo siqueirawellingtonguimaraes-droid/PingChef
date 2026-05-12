@@ -34,10 +34,12 @@ func StartMonitor(ctx context.Context, db *sql.DB, url string, interval time.Dur
 				ResponseTime: responseTime,
 			}
 
-			repo = repositories.NewEventRepository(db)
+			repo := repositories.NewEventRepository(db)
+			if err := repo.Create(new_event); err != nil {
+				return err
+			}
 
+			fmt.Printf("URL: %s - Status: %s, Tempo de resposta: %s\n", url, status, responseTime)
 		}
 	}
-
-	return nil
 }

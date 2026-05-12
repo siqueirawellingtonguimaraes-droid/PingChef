@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"PingChef/cmd/cli/events"
 	"PingChef/cmd/cli/routes"
 
 	"github.com/spf13/cobra"
@@ -19,6 +20,7 @@ var (
 
 func init() {
 	rootCmd.AddCommand(routes.RouteCmd)
+	rootCmd.AddCommand(events.EventCmd)
 }
 
 // Execute executes the root command.

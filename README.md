@@ -1,14 +1,14 @@
 # 🍳 PingChef
 
-> Lightweight monitoring CLI built in Go for tracking HTTP services in real time.
+> Lightweight Go-based CLI for real-time HTTP service monitoring.
 
 ---
 
-# 🧠 About The Project
+# 🧠 About the Project
 
-PingChef is currently in **early development stage**, focused on building a minimal but powerful CLI tool for service health-checking.
+PingChef is a lightweight CLI tool for service health checks.
 
-At this stage, the project does not yet include persistence or a web platform. The focus is on validating the core idea: a fast, concurrent and simple monitoring CLI.
+At this stage, the project includes endpoint management and event persistence, along with a basic health-checking engine.
 
 The long-term vision is to evolve this into a complete monitoring ecosystem.
 
@@ -16,26 +16,19 @@ The long-term vision is to evolve this into a complete monitoring ecosystem.
 
 # 📌 Current Status
 
-🚧 Early Stage / MVP
-
-The project is under active development and currently supports only basic endpoint registration.
-
-⚠️ Limitations at this stage:
-
-- No persistence (endpoints are not saved yet)
-- No SQLite integration implemented
-- No web platform
-- No historical monitoring data
-- Only basic CLI command implemented
+* Persistence layer (endpoints and events stored in a database)
+* SQLite integration implemented
+* Basic CLI commands available (events and endpoints)
+* No web platform yet
 
 ---
 
 # ⚙️ Stack
 
-- Go (Golang)
-- Cobra CLI (structure in progress)
-- net/http (health checks)
-- Future: SQLite + Web dashboard
+* Go (Golang)
+* Cobra CLI (in progress)
+* net/http (health checks)
+* Future: Web dashboard and dedicated production database
 
 ---
 
@@ -43,53 +36,65 @@ The project is under active development and currently supports only basic endpoi
 
 ## ➕ Add Route
 
-The only implemented feature so far is registering endpoints for future monitoring.
+### Command
+
+```bash
+go run .\cmd\main.go route add --name api --url https://api.example.com/health --interval 15
+```
+
+### Flags
+
+| Flag         | Type     | Description                                 | Default  |
+| ------------ | -------- | ------------------------------------------- | -------- |
+| `--name`     | `string` | Friendly name used to identify the endpoint | required |
+| `--url`      | `string` | HTTP endpoint to be monitored               | required |
+| `--interval` | `int`    | Interval between health checks in seconds   | `10`     |
+
+---
+
+## ➕ List Routes
 
 ### Command
 
 ```bash
-"go run .\cmd\main.go route add --name api --url https://api.example.com/health --interval 15"
+go run .\cmd\main.go route list
 ```
+
+---
+
+## ➕ Run All Endpoints
+
+### Command
+
+```bash
+go run .\cmd\main.go event run-all
+```
+
 ---
 
 # 🧠 Design Intent
 
-Even in its early stage, PingChef is being designed with scalability and real-world infrastructure use cases in mind.
+Even in its early stage, PingChef is designed with scalability and real-world infrastructure use cases in mind.
 
 The architecture is being prepared for:
 
-- modular CLI structure
-- concurrent monitoring engine
-- persistent storage layer
-- future distributed/web architecture
+* Modular CLI structure
+* Concurrent monitoring engine
+* Persistent storage layer
+* Future distributed/web architecture
 
 ---
 
 # 🚀 Planned Features
 
-## 📦 Persistence Layer (SQLite)
-
-- Store endpoints locally
-- Persist CLI configuration
-- Enable restart-safe monitoring
-
----
-
-## 🔄 Monitoring Engine
-
-- Continuous HTTP health checks
-- Goroutine-based workers per endpoint
-- Event-based status updates
-- Detection of state changes (UP / DOWN / RECOVERY)
-
----
-
 ## 🌐 Web Platform (Future)
 
-- Dashboard for visualization
-- Endpoint management interface
-- Uptime history tracking
-- Alerting system (Slack, Discord, Telegram)
+* Dashboard for visualization
+* Endpoint management interface
+* Uptime history tracking
+* Alerting system
+* Remote endpoint persistence
+
 
 ---
 
@@ -107,19 +112,19 @@ Each layer builds on top of the previous one, keeping the system modular and ext
 
 # 🧵 Engineering Focus
 
-This project is intentionally being built to explore real-world backend engineering concepts such as:
+This project is intentionally built to explore real-world backend engineering concepts such as:
 
-- concurrency in Go (goroutines + channels)
-- CLI architecture design
-- system modularization
-- infrastructure tooling
-- monitoring systems fundamentals
-- gradual system evolution
+* Concurrency in Go (goroutines + channels)
+* CLI architecture design
+* System modularization
+* Infrastructure tooling
+* Monitoring systems fundamentals
+* Gradual system evolution
 
 ---
 
 # 👨‍💻 Final Notes
 
-PingChef is not just a CLI tool — it is the foundation of a monitoring ecosystem being built step-by-step.
+PingChef is not just a CLI tool — it is the foundation of a monitoring ecosystem built step by step.
 
-The current stage focuses on validating the core interaction model before introducing persistence, distributed components and a web interface.
+The current stage focuses on validating the core interaction model before introducing persistence, distributed components, and a web interface.
