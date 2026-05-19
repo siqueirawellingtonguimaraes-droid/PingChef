@@ -7,7 +7,9 @@ CREATE TABLE IF NOT EXISTS endpoints (
 
 CREATE TABLE IF NOT EXISTS events (
     id TEXT PRIMARY KEY,
-    url TEXT NOT NULL,
+    endpoint_id TEXT NOT NULL,
     status TEXT NOT NULL,
-    response_time INTEGER NOT NULL
+    status_code INTEGER NOT NULL,
+    response_time INTEGER NOT NULL,
+    REFERENCES endpoints(id) ON DELETE CASCADE
 );
