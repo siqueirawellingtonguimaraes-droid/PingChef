@@ -3,12 +3,23 @@ package main
 import (
 	"PingChef/cmd/cli"
 	"PingChef/src/config"
+	"PingChef/src/infra/db"
+	"PingChef/src/infra/repo"
+	"PingChef/src/modules/endpoints"
 	"log"
 )
 
 func main() {
-	if err := config.InitDB(); err != nil {
-		log.Fatal(err)
+	config.InitDB()
+	db, err := db.NewSQLiteConnection()
+	if err != nil {
+		log.Fatal(err.Error())
 	}
-	cli.Execute()
+	defer db.Close()
+
+	repo := repo.NewSQLiteEndpointRepo(db)
+	service := endpoints.NewEndpointService(repo)
+	/* module := endpoints.NewModule(service) */
+
+	cli.Execute(service)
 }

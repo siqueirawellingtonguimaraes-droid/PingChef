@@ -10,9 +10,9 @@ func EndpointToResponseDTO(endpoint Endpoint) ResponseEndpointDTO {
 		eventsDTO[i] = ResponseEventDTO{
 			ID:           event.ID.String(),
 			EndpointID:   endpoint.ID.String(),
-			Status:       event.Status,
+			Status:       string(event.Status),
 			StatusCode:   event.StatusCode,
-			ResponseTime: event.ResponseTime,
+			ResponseTime: int(event.ResponseTime.Milliseconds()),
 		}
 	}
 	return ResponseEndpointDTO{

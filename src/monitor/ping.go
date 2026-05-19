@@ -2,12 +2,13 @@ package monitor
 
 import (
 	"PingChef/src/domain"
+	"PingChef/src/modules/endpoints"
 	"context"
 	"net/http"
 	"time"
 )
 
-func Ping(url string) (domain.Status, time.Duration, error) {
+func Ping(url string) domain.ResponsePing {
 	// timeout da request
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -15,7 +16,7 @@ func Ping(url string) (domain.Status, time.Duration, error) {
 	// cria request com contexto
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
-		return domain.DOWN, 0, err
+		return domain.ResponsePing{Status: endpoints.DOWN, ElapsedTime: 0, Error: err}
 	}
 
 	client := &http.Client{}
@@ -27,14 +28,14 @@ func Ping(url string) (domain.Status, time.Duration, error) {
 	elapsed := time.Since(start)
 
 	if err != nil {
-		return domain.DOWN, elapsed, err
+		return domain.ResponsePing{Status: endpoints.DOWN, ElapsedTime: elapsed, Error: err}
 	}
 	defer resp.Body.Close()
 
 	// considera UP apenas respostas 2xx e 3xx
 	if resp.StatusCode >= 200 && resp.StatusCode < 400 {
-		return domain.UP, elapsed, nil
+		return domain.ResponsePing{Status: endpoints.UP, ElapsedTime: elapsed, Error: nil}
 	}
 
-	return domain.DOWN, elapsed, nil
+	return domain.ResponsePing{Status: endpoints.DOWN, ElapsedTime: elapsed, Error: nil}
 }

@@ -8,11 +8,18 @@ import (
 	"github.com/google/uuid"
 )
 
+type Status string
+
+const (
+	UP   Status = "UP"
+	DOWN Status = "DOWN"
+)
+
 type Event struct {
 	ID           uuid.UUID
-	Status       string
+	Status       Status
 	StatusCode   int
-	ResponseTime int
+	ResponseTime time.Duration
 }
 
 type Endpoint struct {
@@ -37,13 +44,7 @@ func NewEndpoint(name, url string, interval time.Duration) (Endpoint, error) {
 	}, nil
 }
 
-func (e *Endpoint) AddEvent(status string, statusCode, responseTime int) {
-	event := Event{
-		ID:           uuid.New(),
-		Status:       status,
-		StatusCode:   statusCode,
-		ResponseTime: responseTime,
-	}
+func (e *Endpoint) AddEvent(event Event) {
 	e.Events = append(e.Events, event)
 }
 

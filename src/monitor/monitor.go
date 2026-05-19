@@ -1,18 +1,53 @@
 package monitor
 
 import (
-	"PingChef/src/domain"
-	"PingChef/src/repositories"
+	ep "PingChef/src/modules/endpoints"
 	"context"
-	"database/sql"
 	"fmt"
+	"log"
+	"sync"
 	"time"
 
 	"github.com/google/uuid"
 )
 
-func StartMonitor(ctx context.Context, db *sql.DB, url string, interval time.Duration) error {
-	ticker := time.NewTicker(interval)
+type Monitor struct {
+	repo ep.EndpointRepository
+}
+
+func NewMonitor(repo ep.EndpointRepository) *Monitor {
+	return &Monitor{repo: repo}
+}
+
+func (m *Monitor) RunMonitor() {
+
+	endpoints, err := m.repo.FindAllEndpoints()
+	if err != nil {
+		log.Fatal("Erro ao consultar endpoints:", err)
+	}
+
+	var wg sync.WaitGroup
+	ctx := context.Background()
+
+	for _, endpoint := range endpoints {
+
+		wg.Add(1)
+
+		go func(e ep.Endpoint) {
+			defer wg.Done()
+
+			if err := m.startMonitor(ctx, e); err != nil {
+				log.Printf("Erro ao iniciar monitoramento para %s: %v", e.URL, err)
+			}
+		}(endpoint)
+	}
+
+	wg.Wait()
+
+}
+
+func (m *Monitor) startMonitor(ctx context.Context, endpoint ep.Endpoint) error {
+	ticker := time.NewTicker(endpoint.Interval)
 	defer ticker.Stop()
 
 	for {
@@ -22,24 +57,23 @@ func StartMonitor(ctx context.Context, db *sql.DB, url string, interval time.Dur
 			return nil
 
 		case <-ticker.C:
-			status, responseTime, err := Ping(url)
-			if err != nil {
-				return err
+			resp := Ping(endpoint.URL)
+			if resp.Error != nil {
+				return resp.Error
 			}
 
-			new_event := domain.Event{
+			new_event := ep.Event{
 				ID:           uuid.New(),
-				URL:          url,
-				Status:       status,
-				ResponseTime: responseTime,
+				Status:       resp.Status,
+				StatusCode:   resp.StatusCode,
+				ResponseTime: resp.ElapsedTime,
 			}
 
-			repo := repositories.NewEventRepository(db)
-			if err := repo.Create(new_event); err != nil {
-				return err
+			if err := m.repo.SaveEvent(new_event, endpoint.ID.String()); err != nil {
+				log.Printf("Erro ao salvar evento para %s: %v", endpoint.URL, err)
 			}
 
-			fmt.Printf("URL: %s - Status: %s, Tempo de resposta: %s\n", url, status, responseTime)
+			fmt.Printf("URL: %s - Status: %s, Tempo de resposta: %s\n", endpoint.URL, resp.Status, resp.ElapsedTime)
 		}
 	}
 }

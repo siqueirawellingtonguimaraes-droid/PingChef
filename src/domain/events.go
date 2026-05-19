@@ -1,21 +1,15 @@
 package domain
 
 import (
+	"PingChef/src/modules/endpoints"
 	"time"
 
 	"github.com/google/uuid"
 )
 
-type Status string
-
-const (
-	UP   Status = "UP"
-	DOWN Status = "DOWN"
-)
-
 type Event struct {
 	ID           uuid.UUID
 	URL          string
-	Status       Status
+	Status       endpoints.Status
 	ResponseTime time.Duration
 }
