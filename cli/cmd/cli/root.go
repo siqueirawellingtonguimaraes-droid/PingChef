@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"PingChef/cmd/cli/cli_endpoints"
-	"PingChef/src/modules/endpoints"
+	"PingChef/cli/cmd/cli/cli_endpoints"
+	"PingChef/cli/src/modules/endpoints"
 
 	"github.com/spf13/cobra"
 )

@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"PingChef/src/modules/endpoints"
+	"PingChef/cli/src/modules/endpoints"
 	"database/sql"
 )
 

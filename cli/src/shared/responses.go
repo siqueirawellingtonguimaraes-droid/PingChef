@@ -1,7 +1,7 @@
-package domain
+package shared
 
 import (
-	"PingChef/src/modules/endpoints"
+	"PingChef/cli/src/modules/endpoints"
 	"time"
 )
 

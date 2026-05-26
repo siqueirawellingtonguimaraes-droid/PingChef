@@ -1,7 +1,7 @@
 package monitor
 
 import (
-	ep "PingChef/src/modules/endpoints"
+	ep "PingChef/cli/src/modules/endpoints"
 	"context"
 	"fmt"
 	"log"

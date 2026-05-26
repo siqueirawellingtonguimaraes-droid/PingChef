@@ -1,7 +1,7 @@
 package cli_endpoints
 
 import (
-	"PingChef/src/modules/endpoints"
+	"PingChef/cli/src/modules/endpoints"
 	"fmt"
 	"log"
 
